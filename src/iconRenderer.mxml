@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
+	<mx:Script>
+		<![CDATA[
+			import com.adobe.webapis.flickr.PagedPhotoList;
+			import mx.controls.Alert;
+			import com.adobe.webapis.flickr.events.FlickrResultEvent;
+			import com.adobe.webapis.flickr.FlickrService;
+			import com.adobe.webapis.flickr.Photo;
+			import mx.core.Application;
+			
+			private var fls:FlickrLetterSearch;
+			private var myService:FlickrService;
+			private var maxResults:Number = 90;
+			[Bindable]	private var myLetter:String;
+			
+			
+			public function init():void{
+				fls = data as FlickrLetterSearch;
+				myService = fls.service; 		
+				myLetter = fls.letter;
+				myService.addEventListener( FlickrResultEvent.PHOTOS_SEARCH, onPhotosSearch );
+				myService.photos.search("", "character,letter," + myLetter , "all", "",null, null, null, null, -1, "", maxResults,1 );
+			}
+			
+		
+			private function onPhotosSearch( event:FlickrResultEvent ):void {
+			  var photoList:PagedPhotoList = event.data.photos;
+			photoList.perPage = maxResults;
+			
+			//
+			var id:Number = randompicId(0, photoList.photos.length-1);
+			var photo:Photo =photoList.photos[id];
+			
+			pic.source = 'http://static.flickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_s.jpg';
+				
+			}
+			
+			
+			private function randompicId(min:int,max:int):Number{
+				  return Math.round(min + (Math.random() * (max - min)));
+			 	
+			}
+			
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Image id="pic" width="100" height="100" />
+	
+</mx:Box>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" viewSourceURL="srcview/index.html" 
+creationComplete="init(event)"
+xmlns:flckr="com.oki.flickrType.*"
+>
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.events.FlexEvent;
+			import com.adobe.webapis.flickr.*;
+			public var flickr:FlickrService;
+		[Bindable]	public var api_key:String = "";
+
+			Security.allowDomain(["api.flickr.com", "flickr.com", "*"]);
+			Security.allowInsecureDomain(["api.flickr.com", "flickr.com", "*"]);
+	
+			import mx.collections.ArrayCollection;
+			[Bindable] public var wordArrayCollection:ArrayCollection;
+			
+						
+			public function init(e:FlexEvent):void{
+				textChanged();
+			//	wordArrayCollection = new ArrayCollection(new Array("o","n","k","e","l","o","k","i"));
+			}
+			
+			
+			public function textChanged(e:Event =null):void{
+				
+				var sourceArray:Array = new Array();
+				for(var i:Number = 0; i < searchtext.text.length;i++){
+					sourceArray.push(searchtext.text.substr(i,1))	
+				}
+				wordArrayCollection  = new ArrayCollection(sourceArray);
+			}
+			
+			
+		]]>
+	</mx:Script>
+	<mx:TextInput id="searchtext" change="textChanged(event)" text="onkeloki"> </mx:TextInput><mx:Button />
+	
+	<mx:HBox width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" >
+	<mx:Tile horizontalGap="0"  width="100%">
+	
+	<mx:Repeater  dataProvider="{wordArrayCollection}" id="wordRepeater">
+		<flckr:FlickrLetterImage  letter="{wordRepeater.currentItem}" api_key="{api_key}" />
+	</mx:Repeater>
+	
+	</mx:Tile>
+	</mx:HBox>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mx:Application>
